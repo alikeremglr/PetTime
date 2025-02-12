@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "730035833624",
+    "project_id": "pettime-b336c",
+    "storage_bucket": "pettime-b336c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:730035833624:android:831afd66d91d54f8776c6d",
+        "android_client_info": {
+          "package_name": "com.example.pettime"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClOQXF6OkBia29oMYPBW6x133Qy2qff7U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnSelectDate: Button
     private var petsList: MutableList<String> = mutableListOf()
     private var selectedDate: Calendar = Calendar.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +93,25 @@ class MainActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
         if (petName.isNotEmpty()) {
-            val petInfo = "$petType - $petName (Aşı: ${sdf.format(selectedDate.time)})"
-            petsList.add(petInfo)
-            updatePetsList()
-            scheduleNotification(selectedDate)  // Hatırlatıcı ekle
+            val petData = hashMapOf(
+                "name" to petName,
+                "type" to petType,
+                "vaccineDate" to sdf.format(selectedDate.time)
+            )
+
+            db.collection("pets")
+                .add(petData)
+                .addOnSuccessListener { documentReference ->
+                    Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show()
+                    val petInfo = "$petType - $petName (Aşı: ${sdf.format(selectedDate.time)})"
+                    petsList.add(petInfo)
+                    updatePetsList()
+                    scheduleNotification(selectedDate)
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Error adding pet: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+
         } else {
             Toast.makeText(this, "Lütfen bir isim girin!", Toast.LENGTH_SHORT).show()
         }
