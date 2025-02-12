@@ -12,13 +12,12 @@
         android:layout_height="wrap_content"
         android:text="PetTime"
         android:textSize="24sp"
-        android:textColor="#00FF00"
+        android:textColor="#2AE600"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <Spinner
         android:id="@+id/spinnerPetType"
@@ -31,7 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/app_name"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
     <EditText
         android:id="@+id/etPetName"
@@ -49,13 +47,34 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
+        android:id="@+id/btnSelectDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Aşı Tarihi Seç"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPetName"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tvSelectedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seçilen Tarih: -"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectDate"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
         android:id="@+id/btnAddPet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hayvan Ekle"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPetName"
+        app:layout_constraintTop_toBottomOf="@id/tvSelectedDate"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
@@ -66,9 +85,9 @@
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="50dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/btnAddPet"
-    app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAddPet"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tvPets"
