@@ -68,7 +68,10 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
             }
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         getPetInfo()
     }
 
