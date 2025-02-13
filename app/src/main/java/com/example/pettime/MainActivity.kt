@@ -16,12 +16,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var tvSelectedDate: TextView
     private lateinit var btnAddPet: Button
     private lateinit var spinnerPetType: Spinner
     private lateinit var tvPets: TextView
     private lateinit var etPetName: EditText
-    private lateinit var btnSelectDate: Button
+    private lateinit var etVaccinationDate: EditText // Aşı tarihi için EditText
     private var petsList: MutableList<String> = mutableListOf()
     private var selectedDate: Calendar = Calendar.getInstance()
     private val db = FirebaseFirestore.getInstance()
@@ -30,9 +29,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btnSelectDate = findViewById(R.id.btnSelectDate)
-        tvSelectedDate = findViewById(R.id.tvSelectedDate)
         etPetName = findViewById(R.id.etPetName)
+        etVaccinationDate = findViewById(R.id.etVaccinationDate) // Aşı tarihi EditText
         btnAddPet = findViewById(R.id.btnAddPet)
         spinnerPetType = findViewById(R.id.spinnerPetType)
         tvPets = findViewById(R.id.tvPets)
@@ -42,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinnerPetType.adapter = adapter
 
-        btnSelectDate.setOnClickListener {
+        // Aşı tarihi EditText'ine tıklama eventi
+        etVaccinationDate.setOnClickListener {
             showDateTimePicker()
         }
 
@@ -72,7 +71,8 @@ class MainActivity : AppCompatActivity() {
                         selectedDate.set(Calendar.MINUTE, minute)
 
                         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                        tvSelectedDate.text = "Seçilen Tarih: ${sdf.format(selectedDate.time)}"
+                        // Aşı tarihini EditText'e yazıyoruz
+                        etVaccinationDate.setText(sdf.format(selectedDate.time))
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
                     currentDate.get(Calendar.MINUTE),
@@ -90,20 +90,20 @@ class MainActivity : AppCompatActivity() {
     private fun addPet() {
         val petName = etPetName.text.toString().trim()
         val petType = spinnerPetType.selectedItem.toString()
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val vaccinationDate = etVaccinationDate.text.toString().trim() // Aşı tarihini buradan alıyoruz
 
-        if (petName.isNotEmpty()) {
+        if (petName.isNotEmpty() && vaccinationDate.isNotEmpty()) {
             val petData = hashMapOf(
                 "name" to petName,
                 "type" to petType,
-                "vaccineDate" to sdf.format(selectedDate.time)
+                "vaccineDate" to vaccinationDate
             )
 
             db.collection("pets")
                 .add(petData)
                 .addOnSuccessListener { documentReference ->
                     Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show()
-                    val petInfo = "$petType - $petName (Aşı: ${sdf.format(selectedDate.time)})"
+                    val petInfo = "$petType - $petName (Aşı: $vaccinationDate)"
                     petsList.add(petInfo)
                     updatePetsList()
                     scheduleNotification(selectedDate)
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
         } else {
-            Toast.makeText(this, "Lütfen bir isim girin!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lütfen bir isim ve tarih girin!", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -130,7 +130,6 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, "Aşı hatırlatıcısı ayarlandı!", Toast.LENGTH_SHORT).show()
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
