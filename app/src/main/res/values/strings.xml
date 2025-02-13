@@ -1,3 +1,34 @@
 <resources>
     <string name="app_name">PetTime</string>
+
+    <string-array name="pet_types">
+        <item>Kedi</item>
+        <item>Köpek</item>
+        <item>Kuș</item>
+        <item>Hamster</item>
+        <item>İguana</item>
+        <item>Kuğu</item>
+        <item>Kanarya</item>
+        <item>Arı</item>
+        <item>Balina</item>
+        <item>Kaplumbağa</item>
+        <item>Yılan</item>
+        <item>Domuz</item>
+        <item>Farret</item>
+        <item>Guinea Pig</item>
+        <item>Papagan</item>
+        <item>Akvaryum Balığı</item>
+        <item>Sinekkuşu</item>
+        <item>Aslan</item>
+        <item>Maymun</item>
+        <item>Perdebalığı</item>
+        <item>Çita</item>
+        <item>Fok</item>
+        <item>Kertenkele</item>
+        <item>Rottweiler</item>
+        <item>Dalmatian</item>
+        <item>Pug</item>
+        <item>Golden Retriever</item>
+        <item>Bulldog</item>
+    </string-array>
 </resources>

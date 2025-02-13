@@ -4,105 +4,132 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/arka_plan_resmi"
+    android:background="#ECE1D7"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/app_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-black"
         android:text="PetTime"
+        android:textColor="#4CAF50"
         android:textSize="24sp"
-        android:textColor="#2AE600"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp"
-    android:fontFamily="sans-serif-medium"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <Spinner
-        android:id="@+id/spinnerPetType"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etPetType"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#8D6E63"
+        android:hint="Hayvan Türü"
         android:minHeight="48dp"
+        android:paddingStart="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
-        android:layout_marginTop="20dp"
+        android:inputType="none"
+        android:focusable="false"
+        android:drawableEnd="@drawable/spinner_arrow"
+        android:textColor="#2E2E2E"
+        android:textColorHint="#2E2E2E"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/app_name"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/app_name" />
 
     <EditText
         android:id="@+id/etPetName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#8D6E63"
         android:hint="Hayvan İsmi"
         android:minHeight="48dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
         android:paddingStart="16dp"
+        android:paddingTop="12dp"
         android:paddingEnd="16dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#6E6E6E"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/spinnerPetType"
-    app:layout_constraintEnd_toEndOf="parent" />
+        android:paddingBottom="12dp"
+        android:textColor="#2E2E2E"
+        android:textColorHint="#2E2E2E"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPetType" />
 
     <EditText
         android:id="@+id/etVaccinationDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Aşı Tarihi"
+        android:layout_marginTop="8dp"
         android:minHeight="48dp"
-        android:paddingTop="12dp"
-        android:paddingBottom="12dp"
+        android:backgroundTint="#8D6E63"
+        android:textColor="#2E2E2E"
+        android:hint="Aşı Tarihi"
+        android:textColorHint="#2E2E2E"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#6E6E6E"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etPetName"
-    app:layout_constraintEnd_toEndOf="parent" />
+        android:paddingEnd="4dp"
+        android:focusable="false"
+        android:inputType="none"
+        android:layout_marginHorizontal="8dp"
+        android:drawableEnd="@drawable/ic_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPetName" />
 
-    <!-- Hayvan Ekle Butonu -->
     <Button
         android:id="@+id/btnAddPet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#4CAF50"
+        android:fontFamily="sans-serif-medium"
         android:text="Hayvan Ekle"
+        android:textSize="16sp"
+        android:letterSpacing="0.2"
         android:textColor="#FFFFFF"
-    android:backgroundTint="#2AE600"
-    android:layout_marginTop="20dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/etVaccinationDate"
-    app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etVaccinationDate" />
 
     <TextView
         android:id="@+id/tvPetsList"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Eklenen Hayvanlar:"
-        android:textSize="18sp"
-        android:textColor="#D4BFAF"
-    android:textStyle="bold"
-    android:layout_marginTop="50dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/btnAddPet"
-    app:layout_constraintEnd_toEndOf="parent" />
-
+        android:textColor="#2E2E2E"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-medium"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnAddPet" />
 
     <TextView
         android:id="@+id/tvPets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:text=""
-        android:textSize="16sp"
-        android:textColor="#D4BFAF"
-    android:layout_marginTop="10dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/tvPetsList"
-    app:layout_constraintEnd_toEndOf="parent" />
+        tools:text= "asdsadsadasdsa"
+        android:background="#778D6E63"
+        android:textColor="#2E2E2E"
+        android:fontFamily="sans-serif-medium"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:layout_marginHorizontal="8dp"
+        android:textAlignment="viewStart"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvPetsList"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

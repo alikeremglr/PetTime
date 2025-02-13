@@ -17,7 +17,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnAddPet: Button
-    private lateinit var spinnerPetType: Spinner
+    private lateinit var etPetType: EditText
     private lateinit var tvPets: TextView
     private lateinit var etPetName: EditText
     private lateinit var etVaccinationDate: EditText // Aşı tarihi için EditText
@@ -30,17 +30,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         etPetName = findViewById(R.id.etPetName)
-        etVaccinationDate = findViewById(R.id.etVaccinationDate) // Aşı tarihi EditText
+        etVaccinationDate = findViewById(R.id.etVaccinationDate)
         btnAddPet = findViewById(R.id.btnAddPet)
-        spinnerPetType = findViewById(R.id.spinnerPetType)
+        etPetType = findViewById(R.id.etPetType)
         tvPets = findViewById(R.id.tvPets)
 
-        val petTypes = arrayOf("Kedi", "Köpek", "Kuş")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, petTypes)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerPetType.adapter = adapter
+        etPetType.setOnClickListener {
+            showPetTypePicker()
+        }
 
-        // Aşı tarihi EditText'ine tıklama eventi
         etVaccinationDate.setOnClickListener {
             showDateTimePicker()
         }
@@ -71,7 +69,6 @@ class MainActivity : AppCompatActivity() {
                         selectedDate.set(Calendar.MINUTE, minute)
 
                         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-                        // Aşı tarihini EditText'e yazıyoruz
                         etVaccinationDate.setText(sdf.format(selectedDate.time))
                     },
                     currentDate.get(Calendar.HOUR_OF_DAY),
@@ -89,7 +86,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addPet() {
         val petName = etPetName.text.toString().trim()
-        val petType = spinnerPetType.selectedItem.toString()
+        val petType = etPetType.text.toString()
         val vaccinationDate = etVaccinationDate.text.toString().trim() // Aşı tarihini buradan alıyoruz
 
         if (petName.isNotEmpty() && vaccinationDate.isNotEmpty()) {
@@ -115,6 +112,28 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Lütfen bir isim ve tarih girin!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showPetTypePicker() {
+        val petTypes = resources.getStringArray(R.array.pet_types)
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Evcil Hayvan Türünü Seç")
+
+        var selectedType = petTypes[0]
+
+        builder.setSingleChoiceItems(petTypes, -1) { _, which ->
+            selectedType = petTypes[which]
+        }
+
+        builder.setPositiveButton("Seç") { _, _ ->
+            findViewById<EditText>(R.id.etPetType).setText(selectedType)
+        }
+
+        builder.setNegativeButton("İptal", null)
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun updatePetsList() {
