@@ -68,6 +68,8 @@ class MainActivity : AppCompatActivity() {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
             }
         }
+
+        getPetInfo()
     }
 
     private fun showDateTimePicker() {
@@ -114,10 +116,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             val updatedMap = hashMapOf(FIRESTORE_PET_INFO_KEY to updatedPetInfo)
-            val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
 
             db.collection(FIRESTORE_COLLECTION_KEY)
-                .document(deviceId)
+                .document(getDeviceIdForFirebase())
                 .set(updatedMap)
                 .addOnSuccessListener {
                     Toast.makeText(this, "$petName için yeni aşı zamanı eklendi!", Toast.LENGTH_SHORT).show()
@@ -183,5 +184,29 @@ class MainActivity : AppCompatActivity() {
     private fun hideKeyboard(view: View) {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun getDeviceIdForFirebase(): String {
+        return Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+    }
+    private fun getPetInfo() {
+        val deviceId = getDeviceIdForFirebase()
+        val documentRef = db.collection("Users").document(deviceId)
+
+        documentRef.get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val petInfo = documentSnapshot.getString("petInfo")
+                    petInfo?.let {
+                        tvPets.text = it
+                    }
+                } else {
+                    Toast.makeText(this, "Veri bulunamadı", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Veri alınırken hata oluştu: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
     }
 }
