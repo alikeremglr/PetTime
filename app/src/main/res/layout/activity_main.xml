@@ -30,6 +30,7 @@
         android:backgroundTint="#8D6E63"
         android:hint="Hayvan Türü"
         android:minHeight="48dp"
+        android:lines="1"
         android:paddingStart="16dp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
@@ -55,6 +56,9 @@
         android:paddingTop="12dp"
         android:paddingEnd="16dp"
         android:paddingBottom="12dp"
+        android:lines="1"
+        android:inputType="textPersonName"
+        android:imeOptions="actionDone"
         android:textColor="#2E2E2E"
         android:textColorHint="#2E2E2E"
         android:layout_marginHorizontal="8dp"
@@ -72,6 +76,7 @@
         android:textColor="#2E2E2E"
         android:hint="Aşı Tarihi"
         android:textColorHint="#2E2E2E"
+        android:lines="1"
         android:paddingStart="16dp"
         android:paddingEnd="4dp"
         android:focusable="false"
@@ -98,7 +103,7 @@
         app:layout_constraintTop_toBottomOf="@id/etVaccinationDate" />
 
     <TextView
-        android:id="@+id/tvPetsList"
+        android:id="@+id/tvPetListTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -113,7 +118,7 @@
         app:layout_constraintTop_toBottomOf="@id/btnAddPet" />
 
     <TextView
-        android:id="@+id/tvPets"
+        android:id="@+id/tvPetList"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -129,7 +134,7 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPetsList"
+        app:layout_constraintTop_toBottomOf="@id/tvPetListTitle"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

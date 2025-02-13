@@ -14,6 +14,11 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
+import android.provider.Settings
+import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import com.google.firebase.firestore.FieldValue
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnAddPet: Button
@@ -21,9 +26,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvPets: TextView
     private lateinit var etPetName: EditText
     private lateinit var etVaccinationDate: EditText // Aşı tarihi için EditText
-    private var petsList: MutableList<String> = mutableListOf()
     private var selectedDate: Calendar = Calendar.getInstance()
     private val db = FirebaseFirestore.getInstance()
+    private val FIRESTORE_COLLECTION_KEY = "Users"
+    private val FIRESTORE_PET_INFO_KEY = "petInfo"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,10 +39,19 @@ class MainActivity : AppCompatActivity() {
         etVaccinationDate = findViewById(R.id.etVaccinationDate)
         btnAddPet = findViewById(R.id.btnAddPet)
         etPetType = findViewById(R.id.etPetType)
-        tvPets = findViewById(R.id.tvPets)
+        tvPets = findViewById(R.id.tvPetList)
 
         etPetType.setOnClickListener {
             showPetTypePicker()
+        }
+
+        etVaccinationDate.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard(v)
+                true
+            } else {
+                false
+            }
         }
 
         etVaccinationDate.setOnClickListener {
@@ -87,26 +102,30 @@ class MainActivity : AppCompatActivity() {
     private fun addPet() {
         val petName = etPetName.text.toString().trim()
         val petType = etPetType.text.toString()
-        val vaccinationDate = etVaccinationDate.text.toString().trim() // Aşı tarihini buradan alıyoruz
+        val vaccinationDate = etVaccinationDate.text.toString().trim()
 
-        if (petName.isNotEmpty() && vaccinationDate.isNotEmpty()) {
-            val petData = hashMapOf(
-                "name" to petName,
-                "type" to petType,
-                "vaccineDate" to vaccinationDate
-            )
+        if (petName.isNotEmpty() && petType.isNotEmpty() && vaccinationDate.isNotEmpty()) {
+            val petData = "$petType - $petName (Aşı: $vaccinationDate)"
+            val currentPetInfo = findViewById<TextView>(R.id.tvPetList).text.toString()
+            val updatedPetInfo = if (currentPetInfo.isNotEmpty()) {
+                "$currentPetInfo\n$petData"
+            } else {
+                petData
+            }
 
-            db.collection("pets")
-                .add(petData)
-                .addOnSuccessListener { documentReference ->
-                    Toast.makeText(this, "Pet added successfully!", Toast.LENGTH_SHORT).show()
-                    val petInfo = "$petType - $petName (Aşı: $vaccinationDate)"
-                    petsList.add(petInfo)
-                    updatePetsList()
+            val updatedMap = hashMapOf(FIRESTORE_PET_INFO_KEY to updatedPetInfo)
+            val deviceId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+
+            db.collection(FIRESTORE_COLLECTION_KEY)
+                .document(deviceId)
+                .set(updatedMap)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "$petName için yeni aşı zamanı eklendi!", Toast.LENGTH_SHORT).show()
+                    updatePetsList(updatedPetInfo)
                     scheduleNotification(selectedDate)
                 }
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Error adding pet: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Ekleme yapılırken bir hata oluştu: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
 
         } else {
@@ -136,8 +155,8 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun updatePetsList() {
-        tvPets.text = petsList.joinToString("\n")
+    private fun updatePetsList(updatedText: String) {
+        tvPets.text = updatedText
     }
 
     private fun scheduleNotification(date: Calendar) {
@@ -159,5 +178,10 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Bildirim izni verilmedi", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun hideKeyboard(view: View) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
