@@ -25,12 +25,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var etPetType: EditText
     private lateinit var tvPets: TextView
     private lateinit var etPetName: EditText
-    private lateinit var etVaccinationDate: EditText // Aşı tarihi için EditText
+    private lateinit var etVaccinationDate: EditText
     private var selectedDate: Calendar = Calendar.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val FIRESTORE_COLLECTION_KEY = "Users"
     private val FIRESTORE_PET_INFO_KEY = "petInfo"
-
+    private var loadingDialog: AlertDialog? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -120,6 +120,7 @@ class MainActivity : AppCompatActivity() {
 
             val updatedMap = hashMapOf(FIRESTORE_PET_INFO_KEY to updatedPetInfo)
 
+            showLoading()
             db.collection(FIRESTORE_COLLECTION_KEY)
                 .document(getDeviceIdForFirebase())
                 .set(updatedMap)
@@ -127,11 +128,12 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this, "$petName için yeni aşı zamanı eklendi!", Toast.LENGTH_SHORT).show()
                     updatePetsList(updatedPetInfo)
                     scheduleNotification(selectedDate)
+                    hideLoading()
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "Ekleme yapılırken bir hata oluştu: ${e.message}", Toast.LENGTH_SHORT).show()
+                    hideLoading()
                 }
-
         } else {
             Toast.makeText(this, "Lütfen bir isim ve tarih girin!", Toast.LENGTH_SHORT).show()
         }
@@ -196,20 +198,35 @@ class MainActivity : AppCompatActivity() {
         val deviceId = getDeviceIdForFirebase()
         val documentRef = db.collection("Users").document(deviceId)
 
+        showLoading()
         documentRef.get()
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot.exists()) {
-                    val petInfo = documentSnapshot.getString("petInfo")
-                    petInfo?.let {
-                        tvPets.text = it
-                    }
+                    tvPets.text = documentSnapshot.getString("petInfo")
                 } else {
+                    tvPets.text = null
                     Toast.makeText(this, "Veri bulunamadı", Toast.LENGTH_SHORT).show()
                 }
+                hideLoading()
             }
             .addOnFailureListener { e ->
+                hideLoading()
                 Toast.makeText(this, "Veri alınırken hata oluştu: ${e.message}", Toast.LENGTH_SHORT)
                     .show()
             }
+    }
+
+    private fun showLoading() {
+        val dialogView = layoutInflater.inflate(R.layout.layout_loading, null)
+        loadingDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(false)
+            .create()
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
     }
 }
