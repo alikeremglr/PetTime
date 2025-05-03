@@ -5,6 +5,7 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.wifi.aware.PublishDiscoverySession
 import android.os.Build
 import android.os.Bundle
 import android.widget.*
@@ -19,6 +20,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import com.google.firebase.firestore.FieldValue
+import org.checkerframework.common.returnsreceiver.qual.This
 
 class MainActivity : AppCompatActivity() {
     private lateinit var btnAddPet: Button
@@ -26,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvPets: TextView
     private lateinit var etPetName: EditText
     private lateinit var etVaccinationDate: EditText
+    private lateinit var btnDeletePet: Button
     private var selectedDate: Calendar = Calendar.getInstance()
     private val db = FirebaseFirestore.getInstance()
     private val FIRESTORE_COLLECTION_KEY = "Users"
@@ -40,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         btnAddPet = findViewById(R.id.btnAddPet)
         etPetType = findViewById(R.id.etPetType)
         tvPets = findViewById(R.id.tvPetList)
+        btnDeletePet = findViewById(R.id.btnDeletePet)
 
         etPetType.setOnClickListener {
             showPetTypePicker()
@@ -62,6 +66,53 @@ class MainActivity : AppCompatActivity() {
             addPet()
         }
 
+        btnDeletePet.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Hayvan Sil")
+
+            val inputEditText = EditText(this)
+            inputEditText.hint = "Silinecek hayvanın adını girin"
+            builder.setView(inputEditText)
+
+            builder.setPositiveButton("Sil") { dialog, _ ->
+                val silinecekIsim = inputEditText.text.toString().trim()
+                if (silinecekIsim.isNotEmpty()) {
+                    val mevcutListe = tvPets.text.toString()
+                    val satirlar = mevcutListe.lines()
+
+                    val guncelSatirlar = satirlar.filter { satir ->
+                        !satir.contains("- $silinecekIsim ", ignoreCase = true)
+                    }
+                    val yeniMetin = guncelSatirlar.joinToString("\n")
+
+                    showLoading()
+                    val guncelMap = hashMapOf(FIRESTORE_PET_INFO_KEY to yeniMetin)
+
+                    db.collection(FIRESTORE_COLLECTION_KEY)
+                        .document(getDeviceIdForFirebase())
+                        .set(guncelMap)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "$silinecekIsim silindi", Toast.LENGTH_SHORT).show()
+                            updatePetsList(yeniMetin)
+                            hideLoading()
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Silme hatası: ${e.message}", Toast.LENGTH_SHORT).show()
+                            hideLoading()
+                        }
+                } else {
+                    Toast.makeText(this, "Lütfen silinecek hayvan adını girin", Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
+
+            builder.setNegativeButton("İptal") { dialog, _ ->
+                dialog.cancel()
+            }
+
+            builder.show()
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -74,6 +125,9 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         getPetInfo()
     }
+
+
+
 
     private fun showDateTimePicker() {
         val currentDate = Calendar.getInstance()
