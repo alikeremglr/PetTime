@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1E0C6"
+    tools:context=".petAddActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#6E8B52 "
+        android:elevation="4dp"
+        app:title="PetTime"
+        app:titleTextColor="#715139"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+    <EditText
+        android:id="@+id/etPetType"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#8D6E63"
+        android:hint="Hayvan Türü"
+        android:minHeight="48dp"
+        android:lines="1"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:inputType="none"
+        android:focusable="false"
+        android:drawableEnd="@drawable/spinner_arrow"
+        android:textColor="#2E2E2E"
+        android:textColorHint="#2E2E2E"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <EditText
+        android:id="@+id/etPetName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#8D6E63"
+        android:hint="Hayvan İsmi"
+        android:minHeight="48dp"
+        android:paddingStart="16dp"
+        android:paddingTop="12dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp"
+        android:lines="1"
+        android:inputType="textPersonName"
+        android:imeOptions="actionDone"
+        android:textColor="#2E2E2E"
+        android:textColorHint="#2E2E2E"
+        android:layout_marginHorizontal="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPetType" />
+
+    <EditText
+        android:id="@+id/etVaccinationDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:minHeight="48dp"
+        android:backgroundTint="#8D6E63"
+        android:textColor="#2E2E2E"
+        android:hint="Aşı Tarihi"
+        android:textColorHint="#2E2E2E"
+        android:lines="1"
+        android:paddingStart="16dp"
+        android:paddingEnd="4dp"
+        android:focusable="false"
+        android:inputType="none"
+        android:layout_marginHorizontal="8dp"
+        android:drawableEnd="@drawable/ic_calendar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etPetName" />
+
+    <Button
+        android:id="@+id/btnAddPet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="#6E8B52"
+        android:fontFamily="sans-serif-medium"
+        android:text="Hayvan Ekle"
+        android:textSize="16sp"
+        android:letterSpacing="0.2"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etVaccinationDate" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
